@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: any) => {
     if( status !== 200 ) {
       return dispatch({ type: 'notAuthenticated' });
     }
-
+    await AsyncStorage.setItem('token', data.token );
     dispatch({ 
       type: 'signUp',
       payload: {
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: any) => {
         }
       });
 
-      await AsyncStorage.setItem('token', data.token )
+      await AsyncStorage.setItem('token', data.token );
 
     } catch (error: any) {
       dispatch({
