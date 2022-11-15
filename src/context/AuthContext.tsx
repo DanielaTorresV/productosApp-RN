@@ -40,7 +40,19 @@ export const AuthProvider = ({ children }: any) => {
 
     if ( !token ) return dispatch({ type: 'notAuthenticated' });
 
-    
+    const { data, status } = await cafeApi.get('/auth');
+
+    if( status !== 200 ) {
+      return dispatch({ type: 'notAuthenticated' });
+    }
+
+    dispatch({ 
+      type: 'signUp',
+      payload: {
+        token: data.token,
+        user: data.usuario
+      }
+    });
   }
 
   const signIn = async({ correo, password }: LoginData) => {
