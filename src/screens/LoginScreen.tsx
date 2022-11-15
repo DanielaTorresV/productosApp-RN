@@ -27,7 +27,7 @@ const LoginScreen = ({ navigation }: Props) => {
       onPress: removeEror 
     }]);
 
-  }, [ errorMessage ])
+  }, [ errorMessage ]);
 
   const onLogin = () => {
     Keyboard.dismiss();

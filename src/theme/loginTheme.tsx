@@ -6,7 +6,7 @@ export const loginStyles = StyleSheet.create({
     paddingHorizontal: 30,
     justifyContent: 'center',
     height: 600,
-    marginBottom: 50
+    marginBottom: 120
   },
   title: {
     color: 'white',
