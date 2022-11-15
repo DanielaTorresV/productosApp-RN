@@ -7,7 +7,7 @@ type AuthContextProps = {
   errorMessage: string,
   token: string | null,
   user: Usuario | null,
-  status: 'checking' | 'authenticated' | 'not-authenticated';
+  status: 'checking' | 'authenticated' | 'not-authenticated',
   signUp: () => void,
   signIn: () => void,
   logout: () => void,
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: any) => {
   return(
     <AuthContext.Provider
       value={{
-        
+
       }}
     >
       { children }
