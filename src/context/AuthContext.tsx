@@ -46,12 +46,19 @@ export const AuthProvider = ({ children }: any) => {
       });
 
     } catch (error: any) {
-      console.log( error.response.data.msg );
+      dispatch({
+        type: 'addError',
+        payload: error.response.data.msg || 'Información Incorrecta'
+      });
     }
   };
   const signUp = () => {};
   const logout = () => {};
-  const removeEror = () => {};
+  const removeEror = () => {
+    dispatch({
+      type: 'removeError'
+    });
+  };
 
   return(
     <AuthContext.Provider
