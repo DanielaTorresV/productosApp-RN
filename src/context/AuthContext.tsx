@@ -81,11 +81,12 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
   const signUp = () => {};
-  const logout = () => {};
+  const logout = async() => {
+    await AsyncStorage.removeItem('token');
+    dispatch({ type: 'logout' });
+  };
   const removeEror = () => {
-    dispatch({
-      type: 'removeError'
-    });
+    dispatch({ type: 'removeError' });
   };
 
   return(
