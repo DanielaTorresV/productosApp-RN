@@ -6,12 +6,16 @@ import {Picker} from '@react-native-picker/picker';
 
 import { ProductsStackParams } from '../navigation/ProductsNavigator';
 import { ScrollView } from 'react-native-gesture-handler';
+import useCategories from '../hooks/useCategories';
+import LoadingScreen from './LoadingScreen';
 
 interface Props extends StackScreenProps<ProductsStackParams, 'ProductScreen'>{};
 
 const ProductScreen = ({ navigation, route }: Props) => {
 
   const { id, name = '' } = route.params;
+
+  const { categories, isLoading } = useCategories();
   const [selectedLanguage, setSelectedLanguage] = useState();
 
   useEffect(() => {
@@ -19,6 +23,10 @@ const ProductScreen = ({ navigation, route }: Props) => {
       title: (name) ? name : 'Nuevo Producto'
     })
   }, [])
+
+  if (isLoading) {
+    return <LoadingScreen />
+  }
 
   return (
     <View style={ styles.containerProduct } >
@@ -38,8 +46,16 @@ const ProductScreen = ({ navigation, route }: Props) => {
           onValueChange={(itemValue, itemIndex) =>
             setSelectedLanguage(itemValue)
           }>
-          <Picker.Item label="Java" value="java" />
-          <Picker.Item label="JavaScript" value="js" />
+            {
+              categories.map( c => (
+                <Picker.Item
+                  key={ c._id }
+                  label={ c.nombre }
+                  value={ c._id } 
+                />
+              ))
+            }
+          
         </Picker>
 
         <Button 
