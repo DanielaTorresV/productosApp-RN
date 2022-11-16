@@ -74,14 +74,16 @@ export const ProductsProvider = ({ children }: any ) => {
         formData.append('archivo', fileToUpload);
     
         try {
-        const resp = await cafeApi.put(
-            `/uploads/productos/${id}`,
-            formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            }
-        );
-    
-        console.log(resp);
+            const resp = await cafeApi.put(`/uploads/productos/${id}`, formData, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+                transformRequest: () => {
+                    return formData;
+                },
+            });
+            console.log(resp)
         } catch (error) {
         console.log({error});
         }
