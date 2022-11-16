@@ -18,7 +18,7 @@ const ProductScreen = ({ navigation, route }: Props) => {
 
   const { categories, isLoading } = useCategories();
 
-  const { loadProductById } = useContext( ProductsContext );
+  const { loadProductById, addProduct, updateProduct } = useContext( ProductsContext );
 
   const { _id, categoriaId, nombre, img, form, onChange, setFormValue } = useForm({
     _id: id,
@@ -30,9 +30,9 @@ const ProductScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: (name) ? name : 'Nuevo Producto'
+      title: (nombre) ? nombre : 'Sin Nombre del Producto'
     })
-  }, []);
+  }, [nombre]);
 
   useEffect(() => {
     loadProduct();
@@ -46,7 +46,16 @@ const ProductScreen = ({ navigation, route }: Props) => {
       categoriaId: product.categoria._id,
       nombre,
       img: product.img || ''
-    })
+    });
+  }
+
+  const saveOrUpdate = () => {
+    if ( id.length > 0 ) {
+      updateProduct( categoriaId, nombre, id );
+    } else {
+      const tempCategoriaId = categoriaId || categories[0]._id;
+      addProduct( tempCategoriaId, nombre );
+    }
   }
 
   if (isLoading) {
@@ -59,7 +68,7 @@ const ProductScreen = ({ navigation, route }: Props) => {
         <Text style={ styles.label } >Nombre del Producto:</Text>
         <TextInput 
           placeholder='Producto'
-          value={ name }
+          value={ nombre }
           onChangeText={ (value) => onChange(value, 'nombre') }
           style={ styles.textInput }
         />
@@ -88,24 +97,28 @@ const ProductScreen = ({ navigation, route }: Props) => {
           title='Guardar'
           color='#5856D6'
           //TODO: Pro hacer
-          onPress={ () => {} }
+          onPress={ saveOrUpdate }
         />
 
-        <View style={ styles.containerButtons }>
-        <Button 
-          title='Cámara'
-          color='#5856D6'
-          //TODO: Pro hacer
-          onPress={ () => {} }
-        />
-        <View style={{ width: 40 }} />
-        <Button 
-          title='Galería'
-          color='#5856D6'
-          //TODO: Pro hacer
-          onPress={ () => {} }
-        />
-        </View>
+        {
+          ( id.length > 0 ) && (
+            <View style={ styles.containerButtons }>
+              <Button 
+                title='Cámara'
+                color='#5856D6'
+                //TODO: Pro hacer
+                onPress={ () => {} }
+              />
+              <View style={{ width: 40 }} />
+              <Button 
+                title='Galería'
+                color='#5856D6'
+                //TODO: Pro hacer
+                onPress={ () => {} }
+              />
+            </View>
+          )
+        }        
 
         {
           img.length > 0 && (

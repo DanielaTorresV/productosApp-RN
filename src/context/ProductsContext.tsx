@@ -30,11 +30,13 @@ export const ProductsProvider = ({ children }: any ) => {
     }
 
     const addProduct = async( categoryId: string, productName: string ) => {
-        
+        console.log('Add Product');
+        console.log({ categoryId, productName });
     }
 
     const updateProduct = async( categoryId: string, productName: string, productId: string ) =>{
-        
+        console.log('Update Product');
+        console.log({ categoryId, productName, productId });
     }
 
     const deleteProduct = async( id: string ) => {
