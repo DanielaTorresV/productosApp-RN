@@ -21,7 +21,7 @@ const ProductScreen = ({ navigation, route }: Props) => {
 
   const { categories, isLoading } = useCategories();
 
-  const { loadProductById, addProduct, updateProduct } = useContext( ProductsContext );
+  const { loadProductById, addProduct, updateProduct, uploadImage } = useContext( ProductsContext );
 
   const { _id, categoriaId, nombre, img, form, onChange, setFormValue } = useForm({
     _id: id,
@@ -73,6 +73,7 @@ const ProductScreen = ({ navigation, route }: Props) => {
 
       //console.log(resp);
       setTempUri(resp.assets![0].uri);
+      uploadImage( resp, _id);
     });
   }
 
