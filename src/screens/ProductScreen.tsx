@@ -77,6 +77,20 @@ const ProductScreen = ({ navigation, route }: Props) => {
     });
   }
 
+  const takePhotoFromGallery = () => {
+    launchImageLibrary({
+      mediaType: 'photo',
+      quality: 0.5,
+    }, (resp) => {
+      if (resp.didCancel) return;
+      if (!resp.assets![0].uri) return;
+
+      //console.log(resp);
+      setTempUri(resp.assets![0].uri);
+      uploadImage( resp, _id);
+    });
+  }
+
   if (isLoading) {
     return <LoadingScreen />
   }
@@ -133,7 +147,7 @@ const ProductScreen = ({ navigation, route }: Props) => {
                 title='Galería'
                 color='#5856D6'
                 //TODO: Pro hacer
-                onPress={ () => {} }
+                onPress={ takePhotoFromGallery }
               />
             </View>
           )
