@@ -18,9 +18,9 @@ const AppState = ({ children }: any) => {
 const App = () => {
   return (
     <NavigationContainer>
-      <AuthProvider>
+      <AppState>
         <StackNavigator />
-      </AuthProvider>      
+      </AppState>      
     </NavigationContainer>
   )
 }
