@@ -1,28 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, ScrollView, Image } from 'react-native';
 
 import {Picker} from '@react-native-picker/picker';
 
 import { ProductsStackParams } from '../navigation/ProductsNavigator';
-import { ScrollView } from 'react-native-gesture-handler';
 import useCategories from '../hooks/useCategories';
 import LoadingScreen from './LoadingScreen';
+import { useForm } from '../hooks/useForm';
+import { ProductsContext } from '../context/ProductsContext';
 
 interface Props extends StackScreenProps<ProductsStackParams, 'ProductScreen'>{};
 
 const ProductScreen = ({ navigation, route }: Props) => {
 
-  const { id, name = '' } = route.params;
+  const { id = '', name = '' } = route.params;
 
   const { categories, isLoading } = useCategories();
-  const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const { loadProductById } = useContext( ProductsContext );
+
+  const { _id, categoriaId, nombre, img, form, onChange, setFormValue } = useForm({
+    _id: id,
+    categoriaId: '',
+    nombre: name,
+    img: ''
+  });
+
 
   useEffect(() => {
     navigation.setOptions({
       title: (name) ? name : 'Nuevo Producto'
     })
+  }, []);
+
+  useEffect(() => {
+    loadProduct();
   }, [])
+
+  const loadProduct = async() => {
+    if (id.length === 0) return;
+    const product = await loadProductById( id );
+    setFormValue({
+      _id: id,
+      categoriaId: product.categoria._id,
+      nombre,
+      img: product.img || ''
+    })
+  }
 
   if (isLoading) {
     return <LoadingScreen />
@@ -34,7 +59,8 @@ const ProductScreen = ({ navigation, route }: Props) => {
         <Text style={ styles.label } >Nombre del Producto:</Text>
         <TextInput 
           placeholder='Producto'
-          //Todo: Value, onChange
+          value={ name }
+          onChangeText={ (value) => onChange(value, 'nombre') }
           style={ styles.textInput }
         />
 
@@ -42,9 +68,9 @@ const ProductScreen = ({ navigation, route }: Props) => {
         <Text style={ styles.label } >Categoría:</Text>
 
         <Picker
-          selectedValue={selectedLanguage}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
+          selectedValue={ categoriaId }
+          onValueChange={( value ) =>
+            onChange( value, 'categoriaId' )
           }>
             {
               categories.map( c => (
@@ -81,6 +107,16 @@ const ProductScreen = ({ navigation, route }: Props) => {
         />
         </View>
 
+        {
+          img.length > 0 && (
+            <Image 
+              source={{ uri: img }}
+              style={ styles.image }
+            />
+          )
+        }
+                {/* todo mostrar img temporal */}
+
       </ScrollView>
     </View>
   )
@@ -112,5 +148,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20
+  },
+  image: {
+    marginTop: 20,
+    width: '100%',
+    height: 300
   }
 });
